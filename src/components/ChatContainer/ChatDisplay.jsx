@@ -30,15 +30,23 @@ const ChatDisplay = ({ currentChat, currentUser, socket }) => {
 
 
   const handleSendMsg = async (msg) => {
+
+    socket.current.emit('send-msg', {
+      to: currentChat._id,
+      from: currentUser._id,
+      message: msg,
+    })
+
     await axios.post(sendMessageRoute, {
       from: currentUser._id,
       to: currentChat._id,
       message: msg,
     })
-    socket.current.emit('send-msg', {
+
+    await axios.post(sendMessageRoute, {
+      from: data._id,
       to: currentChat._id,
-      from: currentUser._id,
-      message: msg,
+      messages: msg
     })
 
     const msgs = [...messages]
